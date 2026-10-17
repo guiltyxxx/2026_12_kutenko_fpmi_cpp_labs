@@ -49,6 +49,10 @@ int size;
 int arr[1000];
 std::cout << "Введите количество элементов массива\n";
 std::cin >> size;
+if (size <= 0 || size > 1000) {
+    std::cout << "Ошибка: размер должен быть от 1 до 1000.\n";
+    return 1;
+}
 std::cout << " Выбери способ ввода: 1 - с клавиатуры, 2 - рандом\n" ;
 int n;
 
@@ -69,6 +73,7 @@ else{
      printArray(arr, size);}
 
 function(arr, size);
+std::cout << "Преобразованный массив:\n";
 printArray(arr, size);
 
 return 0;
