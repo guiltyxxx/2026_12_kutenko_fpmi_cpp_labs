@@ -4,23 +4,42 @@
 
 void inputArray(int* &arr, int &size) {
      std::cout << "Введи размер массива: ";
-     std::cin >> size;
+     if(!(std::cin >> size) || size <= 0){
+          std::cout << "error";
+          return;
+     }
      arr = new int[size];
      std::cout << "Ввод массива: ";
      for (int i = 0; i < size; i++){
-          std::cin >> arr[i];
+          if(!(std::cin >> arr[i])){
+               std::cout << "error";
+               delete[] arr;
+               arr = nullptr;
+               size = 0;
+               return;
+          }
      }
 }
 
 void randomArray(int* &arr, int &size, std::mt19937& gen) {
      std::cout << "Введи размер массива: ";
-     std::cin >> size;
+     if(!(std::cin >> size) || size <= 0){
+          std::cout << "error";
+          return;
+     }
      arr = new int[size];
 
      std::cout << "Введи границы интервалов (a и b через пробел): ";
      int a, b;
-     std::cin >> a >> b;
-
+     if (!(std::cin >> a >> b)) {
+          delete[] arr;
+          arr = nullptr;
+          size = 0;     
+          return;
+     }
+     if(a > b){
+     std::swap(a,b);
+     }
      std::uniform_int_distribution<int> dist(a, b);
      for (int i = 0; i < size; i++) {
           arr[i] = dist(gen);
@@ -38,7 +57,11 @@ void printArray(const int* arr, const int &size){
 void function(int* &arr, int &size) {
      int m;
      std::cout << "Введи число M (модуль): ";
-     std::cin >> m;
+     while (!(std::cin >> m) || m < 0) {
+     std::cout << "Ошибка. Введи M заново: ";
+     std::cin.clear();
+     std::cin.ignore(10000, '\n');
+}
 
      int index = 0;
      for (int i = 0; i < size; i++) {
@@ -60,34 +83,47 @@ void deleteArray(int* &arr, int &size){
 }
 
 int main() {
-    std::mt19937 gen(45218965);
+     std::mt19937 gen(45218965);
 
-    int* myarr = nullptr;
-    int mysize = 0;
+     int* myarr = nullptr;
+     int mysize = 0;
 
-    std::cout << "Выбери способ ввода: 1 - с клавиатуры, 2 - рандом\n";
-    int n;
+     std::cout << "Выбери способ ввода: 1 - с клавиатуры, 2 - рандом\n";
+     int n;
 
-    if (!(std::cin >> n) || (n != 1 && n != 2)) {
+     if (!(std::cin >> n) || (n != 1 && n != 2)) {
          std::cout << "error";
          return 1;
     }
 
-    if (n == 1) {
-         inputArray(myarr, mysize);
-         printArray(myarr, mysize);
-    } else {
-         randomArray(myarr, mysize, gen);
-         std::cout << "Рандомный массив: ";
-         printArray(myarr, mysize);
-    }
+     if (n == 1) {
+          inputArray(myarr, mysize);
+          if (!std::cin || myarr == nullptr) {
+               deleteArray(myarr, mysize);
+               return 1;
+          }
+          printArray(myarr, mysize);
+     } 
+     else {
+          randomArray(myarr, mysize, gen);
+          if (!std::cin || myarr == nullptr) {
+               deleteArray(myarr, mysize);
+               return 1;
+}
+          std::cout << "Рандомный массив: ";
+          printArray(myarr, mysize);
+     }
 
-    function(myarr, mysize);
+     function(myarr, mysize);
+     if (!std::cin) {
+     deleteArray(myarr, mysize);
+     return 1;
+}
     
-    std::cout << "Преобразованный массив:\n";
-    printArray(myarr, mysize);
+     std::cout << "Преобразованный массив:\n";
+     printArray(myarr, mysize);
 
-    deleteArray(myarr, mysize);
+     deleteArray(myarr, mysize);
 
-    return 0;
+     return 0;
 }
