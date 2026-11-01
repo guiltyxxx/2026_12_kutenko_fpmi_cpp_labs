@@ -1,5 +1,6 @@
 #include <iostream>
 #include <random>
+#include <algorithm>
 
 void inputArray(int arr[], int size){
      std::cout << "Введите элементы массива";
@@ -13,12 +14,16 @@ void inputArray(int arr[], int size){
 void  randomArray(int arr[], std::mt19937& gen, int size){
      std::cout << "Введи границы интервалов";
      int a,b;
-     std::cin >> a >> b;
+     if (!(std::cin >> a >> b)) {
+        return;
+     }
+     if(a > b){
+     std::swap(a,b);
+     }
      std::uniform_int_distribution<int> dist(a,b);
      for (int i = 0; i < size; i++){
           arr[i] = dist(gen);
-}
-
+     }
 }
 
 void function(int arr[], int size) {
@@ -48,8 +53,7 @@ int main(){
 int size;
 int arr[1000];
 std::cout << "Введите количество элементов массива\n";
-std::cin >> size;
-if (size <= 0 || size > 1000) {
+if (!(std::cin >> size) || size <= 0 || size > 1000) {
     std::cout << "Ошибка: размер должен быть от 1 до 1000.\n";
     return 1;
 }
@@ -66,7 +70,7 @@ if (!(std::cin >> n) || (n != 1 && n != 2)) {
 
 if(n == 1){
      inputArray(arr, size);
-     if (!std::cin) {          
+     if (!std::cin) {         
           std::cout << "error";
           return 1;
     }
@@ -74,8 +78,8 @@ if(n == 1){
 else{
      randomArray(arr, gen, size);
      if (!std::cin) {          
-          std::cout << "error";
-          return 1;
+              std::cout << "error";
+              return 1;
      }
      std::cout << "Рандомный массив:";
      printArray(arr, size);
