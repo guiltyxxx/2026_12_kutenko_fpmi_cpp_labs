@@ -66,11 +66,20 @@ if (!(std::cin >> n) || (n != 1 && n != 2)) {
 
 if(n == 1){
      inputArray(arr, size);
+     if (!std::cin) {          // <--- Твоя стандартная проверка
+          std::cout << "error";
+          return 1;
     }
+}
 else{
      randomArray(arr, gen, size);
+     if (!std::cin) {          // <--- Твоя стандартная проверка
+          std::cout << "error";
+          return 1;
+     }
      std::cout << "Рандомный массив:";
-     printArray(arr, size);}
+     printArray(arr, size);
+}
 
 function(arr, size);
 std::cout << "Преобразованный массив:\n";
